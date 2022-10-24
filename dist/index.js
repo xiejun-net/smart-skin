@@ -12,31 +12,45 @@ var SmartSkin = /** @class */ (function () {
                 linkElement.setAttribute('href', 'data:text/css;charset=UTF-8,' + encodeURIComponent(css));
                 document.head.appendChild(linkElement);
             };
-            var options = {
-                bottom: '32px',
-                right: '32px',
-                left: 'unset',
-                buttonColorDark: '#100f2c',
-                buttonColorLight: '#fff',
-                label: '🌓',
-            };
-            var css = "\n                .darkmode-toggle {\n                    background: ".concat(options.buttonColorDark, ";\n                    width: 1rem;\n                    height: 1rem;\n                    position: fixed;\n                    border-radius: 50%;\n                    border:none;\n                    right: ").concat(options.right, ";\n                    bottom: ").concat(options.bottom, ";\n                    left: ").concat(options.left, ";\n                    cursor: pointer;\n                    transition: all 0.5s ease;\n                    display: flex;\n                    justify-content: center;\n                    align-items: center;\n                    z-index:9999;\n                  }\n                  .darkmode-toggle--white {\n                    background: ").concat(options.buttonColorLight, ";\n                  }\n            ");
+            var css = "\n                .darkmode-toggle {\n                    background: #100f2c;\n                    width: 40px;\n                    height: 40px;\n                    position: fixed;\n                    border-radius: 50%;\n                    border:none;\n                    cursor: pointer;\n                    display: flex;\n                    justify-content: center;\n                    align-items: center;\n                    z-index:9999;\n                  }\n            ";
             var button = document.createElement('button');
-            button.innerHTML = options.label;
+            button.innerHTML = '🌓';
             button.classList.add('darkmode-toggle');
+            button.style.left = document.documentElement.clientWidth - 80 + 'px';
+            button.style.top = document.documentElement.clientHeight - 80 + 'px';
             button.addEventListener('click', function () {
                 var index = _this.options.skinTypeList.findIndex(function (item) { return item === _this.options.currentSkin; });
                 index = (index + 1) % _this.options.skinTypeList.length;
                 _this.changeSkinType(_this.options.skinTypeList[index]);
             });
-            document.body.insertBefore(button, document.body.firstChild);
+            document.body.appendChild(button);
+            var moveFlag = false;
+            button.addEventListener('mousedown', function () {
+                moveFlag = true;
+            });
+            document.body.addEventListener('mousemove', function (ev) {
+                if (moveFlag) {
+                    window.requestAnimationFrame(function () {
+                        button.style.left = ev.x - 15 + 'px';
+                        button.style.top = ev.y - 15 + 'px';
+                    });
+                }
+            });
+            document.body.addEventListener('mouseup', function (ev) {
+                moveFlag === true &&
+                    window.requestAnimationFrame(function () {
+                        button.style.left = ev.x - 15 + 'px';
+                        button.style.top = ev.y - 15 + 'px';
+                    });
+                moveFlag = false;
+            });
             addStyle(css);
         };
         this.options = options;
         this.options.currentSkin =
             this.options.currentSkin || this.options.skinTypeList[0];
     }
-    SmartSkin.prototype.initSkin = function () {
+    SmartSkin.prototype.init = function () {
         if (this.options.skinTypeList.length === 0) {
             console.error("skinTypeList cannot be empty");
             return;
@@ -52,11 +66,19 @@ var SmartSkin = /** @class */ (function () {
         }
         this.options.debugger && this.setupDarkModeDebugger();
     };
-    // 有一些历史页面没有黑白皮肤的时候，需要把skinClass移除
+    /**
+     * @description: 有一些历史页面没有黑白皮肤的时候，需要把skinClass移除
+     * @return {*}
+     */
     SmartSkin.prototype.removeAllSkinType = function () {
         var _a;
         (_a = document.body.classList).remove.apply(_a, this.options.skinTypeList);
     };
+    /**
+     * @description: change Skin type
+     * @param {string} skinType
+     * @return {*}
+     */
     SmartSkin.prototype.changeSkinType = function (skinType) {
         if (skinType) {
             this.options.currentSkin = skinType;

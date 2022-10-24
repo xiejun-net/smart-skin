@@ -6,7 +6,6 @@ export interface IOptions {
     lightSkinStype?: string // 跟随系统浅色模式
     debugger?: boolean // 是否开启调试
 }
-
 export class SmartSkin {
     options: IOptions
     constructor(options: IOptions) {
@@ -14,7 +13,7 @@ export class SmartSkin {
         this.options.currentSkin =
             this.options.currentSkin || this.options.skinTypeList[0]
     }
-    initSkin() {
+    init() {
         if (this.options.skinTypeList.length === 0) {
             console.error(`skinTypeList cannot be empty`)
             return
@@ -30,10 +29,18 @@ export class SmartSkin {
         }
         this.options.debugger && this.setupDarkModeDebugger()
     }
-    // 有一些历史页面没有黑白皮肤的时候，需要把skinClass移除
+    /**
+     * @description: 有一些历史页面没有黑白皮肤的时候，需要把skinClass移除
+     * @return {*}
+     */
     removeAllSkinType() {
         document.body.classList.remove(...this.options.skinTypeList)
     }
+    /**
+     * @description: change Skin type
+     * @param {string} skinType
+     * @return {*}
+     */
     changeSkinType(skinType: string | undefined) {
         if (skinType) {
             this.options.currentSkin = skinType
@@ -60,40 +67,26 @@ export class SmartSkin {
             )
             document.head.appendChild(linkElement)
         }
-        const options = {
-            bottom: '32px',
-            right: '32px',
-            left: 'unset',
-            buttonColorDark: '#100f2c',
-            buttonColorLight: '#fff',
-            label: '🌓',
-        }
-
         const css = `
                 .darkmode-toggle {
-                    background: ${options.buttonColorDark};
-                    width: 1rem;
-                    height: 1rem;
+                    background: #100f2c;
+                    width: 40px;
+                    height: 40px;
                     position: fixed;
                     border-radius: 50%;
                     border:none;
-                    right: ${options.right};
-                    bottom: ${options.bottom};
-                    left: ${options.left};
                     cursor: pointer;
-                    transition: all 0.5s ease;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     z-index:9999;
                   }
-                  .darkmode-toggle--white {
-                    background: ${options.buttonColorLight};
-                  }
             `
         const button = document.createElement('button')
-        button.innerHTML = options.label
+        button.innerHTML = '🌓'
         button.classList.add('darkmode-toggle')
+        button.style.left = document.documentElement.clientWidth - 80 + 'px'
+        button.style.top = document.documentElement.clientHeight - 80 + 'px'
         button.addEventListener('click', () => {
             let index = this.options.skinTypeList.findIndex(
                 (item) => item === this.options.currentSkin
@@ -101,7 +94,27 @@ export class SmartSkin {
             index = (index + 1) % this.options.skinTypeList.length
             this.changeSkinType(this.options.skinTypeList[index])
         })
-        document.body.insertBefore(button, document.body.firstChild)
+        document.body.appendChild(button)
+        let moveFlag = false
+        button.addEventListener('mousedown', () => {
+            moveFlag = true
+        })
+        document.body.addEventListener('mousemove', (ev) => {
+            if (moveFlag) {
+                window.requestAnimationFrame(() => {
+                    button.style.left = ev.x - 15 + 'px'
+                    button.style.top = ev.y - 15 + 'px'
+                })
+            }
+        })
+        document.body.addEventListener('mouseup', (ev) => {
+            moveFlag === true &&
+                window.requestAnimationFrame(() => {
+                    button.style.left = ev.x - 15 + 'px'
+                    button.style.top = ev.y - 15 + 'px'
+                })
+            moveFlag = false
+        })
         addStyle(css)
     }
 }
