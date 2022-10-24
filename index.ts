@@ -99,20 +99,30 @@ export class SmartSkin {
         button.addEventListener('mousedown', () => {
             moveFlag = true
         })
-        document.body.addEventListener('mousemove', (ev) => {
+        document.documentElement.addEventListener('mousemove', (ev) => {
             if (moveFlag) {
+                console.log(1)
                 window.requestAnimationFrame(() => {
                     button.style.left = ev.x - 15 + 'px'
                     button.style.top = ev.y - 15 + 'px'
                 })
             }
         })
-        document.body.addEventListener('mouseup', (ev) => {
-            moveFlag === true &&
+        document.documentElement.addEventListener('mouseup', (ev) => {
+            moveFlag = false
+        })
+        button.addEventListener('touchstart', () => {
+            moveFlag = true
+        })
+        document.documentElement.addEventListener('touchmove', (ev) => {
+            if (moveFlag) {
                 window.requestAnimationFrame(() => {
-                    button.style.left = ev.x - 15 + 'px'
-                    button.style.top = ev.y - 15 + 'px'
+                    button.style.left = ev.changedTouches[0].pageX - 15 + 'px'
+                    button.style.top = ev.changedTouches[0].pageY - 15 + 'px'
                 })
+            }
+        })
+        document.documentElement.addEventListener('touchend', (ev) => {
             moveFlag = false
         })
         addStyle(css)

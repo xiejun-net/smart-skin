@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>smart-skin</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="x5-orientation" content="portrait">
+        <meta name="referrer" content="strict-origin-when-cross-origin">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+        <script type="text/javascript" src="../dist/index.common.js"></script>
+        <style>
+            html,body{
+                height: 100%;
+                width: 100%;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            .simple-white {
+                --background-color: #fff;
+                --text-color: black;
+            }
+            .starry-night {
+                --background-color: black;
+                --text-color: #fff;
+            }
+            .soothing-blue {
+                --background-color: blue;
+                --text-color: #fff;
+            }
+            body {
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }
+        </style>
+    </head>
+    <body>
+        <div>smart-skin demo</div>
+    </body>
+    <script lang="js">
+        const smartSkin = new SmartSkin.SmartSkin({
+            skinTypeList: ['simple-white', 'starry-night', 'soothing-blue'],
+            currentSkin: 'simple-white',
+            darkSkinType: 'starry-night',
+            lightSkinStype: 'simple-white',
+            followUpSystem: false,
+            debugger: true, 
+        })
+        
+        // 皮肤初始化
+        smartSkin.init()
+        </script>
+</html>
+

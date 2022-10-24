@@ -26,22 +26,37 @@ var SmartSkin = /** @class */ (function () {
             document.body.appendChild(button);
             var moveFlag = false;
             button.addEventListener('mousedown', function () {
+                console.log('mousedown');
                 moveFlag = true;
             });
-            document.body.addEventListener('mousemove', function (ev) {
+            document.documentElement.addEventListener('mousemove', function (ev) {
                 if (moveFlag) {
+                    console.log(1);
                     window.requestAnimationFrame(function () {
                         button.style.left = ev.x - 15 + 'px';
                         button.style.top = ev.y - 15 + 'px';
                     });
                 }
             });
-            document.body.addEventListener('mouseup', function (ev) {
-                moveFlag === true &&
+            document.documentElement.addEventListener('mouseup', function (ev) {
+                console.log('mouseup');
+                moveFlag = false;
+            });
+            button.addEventListener('touchstart', function () {
+                console.log('mousedown');
+                moveFlag = true;
+            });
+            document.documentElement.addEventListener('touchmove', function (ev) {
+                console.log(ev);
+                if (moveFlag) {
                     window.requestAnimationFrame(function () {
-                        button.style.left = ev.x - 15 + 'px';
-                        button.style.top = ev.y - 15 + 'px';
+                        button.style.left = ev.changedTouches[0].pageX - 15 + 'px';
+                        button.style.top = ev.changedTouches[0].pageY - 15 + 'px';
                     });
+                }
+            });
+            document.documentElement.addEventListener('touchend', function (ev) {
+                console.log('mouseup');
                 moveFlag = false;
             });
             addStyle(css);
