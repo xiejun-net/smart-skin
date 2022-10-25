@@ -1,60 +1,60 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>smart-skin</title>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="x5-orientation" content="portrait">
-        <meta name="referrer" content="strict-origin-when-cross-origin">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
-        <script type="text/javascript" src="../dist/index.common.js"></script>
-        <style>
-            html,body{
-                height: 100%;
-                width: 100%;
-            }
-            * {
-                margin: 0;
-                padding: 0;
-            }
-            html[data-theme="white"]:root {
-                --background-color: #fff;
-                --text-color: black;
-            }
-            html[data-theme="night"]:root {
-                --background-color: black;
-                --text-color: #fff;
-            }
-            html[data-theme="blue"]:root {
-                --background-color: blue;
-                --text-color: #fff;
-            }
-            body {
-                background-color: var(--background-color);
-                color: var(--text-color);
-            }
-            .demo-text {
-                font-size: 30px;
-                text-align: center;
-                padding-top: 100px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="demo-text">smart-skin demo</div>
-    </body>
-    <script lang="js">
-        const smartSkin = new SmartSkin({
-            skinTypeList: ['white', 'night', 'blue'],
-            currentSkin: 'white',
-            darkSkinType: 'night',
-            lightSkinStype: 'white',
-            followUpSystem: false,
-            debugger: true, 
-        })
-        
-        // 皮肤初始化
-        smartSkin.init()
-        </script>
+<head>
+    <title>smart-skin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <script type="text/javascript" src="../dist/index.common.js"></script>
+    <style>
+        html,body{
+            height: 100%;
+            width: 100%;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html[data-theme="white"]:root {
+            --background-color: #fff;
+            --text-color: black;
+        }
+        html[data-theme="night"]:root {
+            --background-color: black;
+            --text-color: #fff;
+        }
+        html[data-theme="blue"]:root {
+            --background-color: blue;
+            --text-color: #fff;
+        }
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .demo-text {
+            font-size: 30px;
+            text-align: center;
+            padding-top: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-text">smart-skin demo</div>
+</body>
+<script lang="text/javascript">
+const smartSkin = new SmartSkin({
+    skinTypeList: ['white', 'night', 'blue'],
+    currentSkin: 'white',
+    darkSkinType: 'night',
+    lightSkinStype: 'white',
+    followUpSystem: false,
+    debugger: true, 
+})
+
+// 皮肤初始化
+smartSkin.init()
+</script>
 </html>
 

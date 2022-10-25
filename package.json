@@ -1,6 +1,6 @@
 {
   "name": "smart-skin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "js for web change skin",
   "main": "dist/index.js",
   "author": "xiejun",
@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "rollup": "^2.79.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiejun-net/smart-skin.git"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
