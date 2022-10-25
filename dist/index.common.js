@@ -1,16 +1,13 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.SmartSkin = {}));
-})(this, (function (exports) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.SmartSkin = factory());
+})(this, (function () { 'use strict';
 
     var SmartSkin = /** @class */ (function () {
         function SmartSkin(options) {
             var _this = this;
-            this.setupDarkModeDebugger = function () {
-                var isExistButton = document.querySelector('.darkmode-toggle');
-                if (isExistButton)
-                    return;
+            this._setupDarkModeDebugger = function () {
                 var addStyle = function (css) {
                     var linkElement = document.createElement('link');
                     linkElement.setAttribute('rel', 'stylesheet');
@@ -30,13 +27,12 @@
                     _this.changeSkinType(_this.options.skinTypeList[index]);
                 });
                 document.body.appendChild(button);
-                var moveFlag = false;
+                var canMove = false;
                 button.addEventListener('mousedown', function () {
-                    console.log('mousedown');
-                    moveFlag = true;
+                    canMove = true;
                 });
                 document.documentElement.addEventListener('mousemove', function (ev) {
-                    if (moveFlag) {
+                    if (canMove) {
                         console.log(1);
                         window.requestAnimationFrame(function () {
                             button.style.left = ev.x - 15 + 'px';
@@ -45,16 +41,13 @@
                     }
                 });
                 document.documentElement.addEventListener('mouseup', function (ev) {
-                    console.log('mouseup');
-                    moveFlag = false;
+                    canMove = false;
                 });
                 button.addEventListener('touchstart', function () {
-                    console.log('mousedown');
-                    moveFlag = true;
+                    canMove = true;
                 });
                 document.documentElement.addEventListener('touchmove', function (ev) {
-                    console.log(ev);
-                    if (moveFlag) {
+                    if (canMove) {
                         window.requestAnimationFrame(function () {
                             button.style.left = ev.changedTouches[0].pageX - 15 + 'px';
                             button.style.top = ev.changedTouches[0].pageY - 15 + 'px';
@@ -62,8 +55,7 @@
                     }
                 });
                 document.documentElement.addEventListener('touchend', function (ev) {
-                    console.log('mouseup');
-                    moveFlag = false;
+                    canMove = false;
                 });
                 addStyle(css);
             };
@@ -85,15 +77,14 @@
                 this._followUpSystem(matchMedia);
                 matchMedia.addEventListener('change', this._followUpSystem);
             }
-            this.options.debugger && this.setupDarkModeDebugger();
+            this.options.debugger && this._setupDarkModeDebugger();
         };
         /**
          * @description: 有一些历史页面没有黑白皮肤的时候，需要把skinClass移除
          * @return {*}
          */
         SmartSkin.prototype.removeAllSkinType = function () {
-            var _a;
-            (_a = document.body.classList).remove.apply(_a, this.options.skinTypeList);
+            document.documentElement.setAttribute('data-theme', '');
         };
         /**
          * @description: change Skin type
@@ -104,7 +95,7 @@
             if (skinType) {
                 this.options.currentSkin = skinType;
                 this.removeAllSkinType();
-                document.body.classList.add(skinType);
+                document.documentElement.setAttribute('data-theme', this.options.currentSkin);
             }
         };
         SmartSkin.prototype._followUpSystem = function (ev) {
@@ -114,8 +105,6 @@
         return SmartSkin;
     }());
 
-    exports.SmartSkin = SmartSkin;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
+    return SmartSkin;
 
 }));

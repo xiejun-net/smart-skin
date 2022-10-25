@@ -17,15 +17,15 @@
                 margin: 0;
                 padding: 0;
             }
-            .simple-white {
+            html[data-theme="white"]:root {
                 --background-color: #fff;
                 --text-color: black;
             }
-            .starry-night {
+            html[data-theme="night"]:root {
                 --background-color: black;
                 --text-color: #fff;
             }
-            .soothing-blue {
+            html[data-theme="blue"]:root {
                 --background-color: blue;
                 --text-color: #fff;
             }
@@ -33,17 +33,22 @@
                 background-color: var(--background-color);
                 color: var(--text-color);
             }
+            .demo-text {
+                font-size: 30px;
+                text-align: center;
+                padding-top: 100px;
+            }
         </style>
     </head>
     <body>
-        <div>smart-skin demo</div>
+        <div class="demo-text">smart-skin demo</div>
     </body>
     <script lang="js">
-        const smartSkin = new SmartSkin.SmartSkin({
-            skinTypeList: ['simple-white', 'starry-night', 'soothing-blue'],
-            currentSkin: 'simple-white',
-            darkSkinType: 'starry-night',
-            lightSkinStype: 'simple-white',
+        const smartSkin = new SmartSkin({
+            skinTypeList: ['white', 'night', 'blue'],
+            currentSkin: 'white',
+            darkSkinType: 'night',
+            lightSkinStype: 'white',
             followUpSystem: false,
             debugger: true, 
         })

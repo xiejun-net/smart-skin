@@ -1,10 +1,7 @@
 var SmartSkin = /** @class */ (function () {
     function SmartSkin(options) {
         var _this = this;
-        this.setupDarkModeDebugger = function () {
-            var isExistButton = document.querySelector('.darkmode-toggle');
-            if (isExistButton)
-                return;
+        this._setupDarkModeDebugger = function () {
             var addStyle = function (css) {
                 var linkElement = document.createElement('link');
                 linkElement.setAttribute('rel', 'stylesheet');
@@ -24,13 +21,12 @@ var SmartSkin = /** @class */ (function () {
                 _this.changeSkinType(_this.options.skinTypeList[index]);
             });
             document.body.appendChild(button);
-            var moveFlag = false;
+            var canMove = false;
             button.addEventListener('mousedown', function () {
-                console.log('mousedown');
-                moveFlag = true;
+                canMove = true;
             });
             document.documentElement.addEventListener('mousemove', function (ev) {
-                if (moveFlag) {
+                if (canMove) {
                     console.log(1);
                     window.requestAnimationFrame(function () {
                         button.style.left = ev.x - 15 + 'px';
@@ -39,16 +35,13 @@ var SmartSkin = /** @class */ (function () {
                 }
             });
             document.documentElement.addEventListener('mouseup', function (ev) {
-                console.log('mouseup');
-                moveFlag = false;
+                canMove = false;
             });
             button.addEventListener('touchstart', function () {
-                console.log('mousedown');
-                moveFlag = true;
+                canMove = true;
             });
             document.documentElement.addEventListener('touchmove', function (ev) {
-                console.log(ev);
-                if (moveFlag) {
+                if (canMove) {
                     window.requestAnimationFrame(function () {
                         button.style.left = ev.changedTouches[0].pageX - 15 + 'px';
                         button.style.top = ev.changedTouches[0].pageY - 15 + 'px';
@@ -56,8 +49,7 @@ var SmartSkin = /** @class */ (function () {
                 }
             });
             document.documentElement.addEventListener('touchend', function (ev) {
-                console.log('mouseup');
-                moveFlag = false;
+                canMove = false;
             });
             addStyle(css);
         };
@@ -79,15 +71,14 @@ var SmartSkin = /** @class */ (function () {
             this._followUpSystem(matchMedia);
             matchMedia.addEventListener('change', this._followUpSystem);
         }
-        this.options.debugger && this.setupDarkModeDebugger();
+        this.options.debugger && this._setupDarkModeDebugger();
     };
     /**
      * @description: 有一些历史页面没有黑白皮肤的时候，需要把skinClass移除
      * @return {*}
      */
     SmartSkin.prototype.removeAllSkinType = function () {
-        var _a;
-        (_a = document.body.classList).remove.apply(_a, this.options.skinTypeList);
+        document.documentElement.setAttribute('data-theme', '');
     };
     /**
      * @description: change Skin type
@@ -98,7 +89,7 @@ var SmartSkin = /** @class */ (function () {
         if (skinType) {
             this.options.currentSkin = skinType;
             this.removeAllSkinType();
-            document.body.classList.add(skinType);
+            document.documentElement.setAttribute('data-theme', this.options.currentSkin);
         }
     };
     SmartSkin.prototype._followUpSystem = function (ev) {
@@ -108,4 +99,4 @@ var SmartSkin = /** @class */ (function () {
     return SmartSkin;
 }());
 
-export { SmartSkin };
+export { SmartSkin as default };

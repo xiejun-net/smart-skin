@@ -6,7 +6,7 @@ export interface IOptions {
     lightSkinStype?: string // 跟随系统浅色模式
     debugger?: boolean // 是否开启调试
 }
-export class SmartSkin {
+export default class SmartSkin{
     options: IOptions
     constructor(options: IOptions) {
         this.options = options
@@ -27,14 +27,14 @@ export class SmartSkin {
             this._followUpSystem(matchMedia)
             matchMedia.addEventListener('change', this._followUpSystem)
         }
-        this.options.debugger && this.setupDarkModeDebugger()
+        this.options.debugger && this._setupDarkModeDebugger()
     }
     /**
      * @description: 有一些历史页面没有黑白皮肤的时候，需要把skinClass移除
      * @return {*}
      */
     removeAllSkinType() {
-        document.body.classList.remove(...this.options.skinTypeList)
+        document.documentElement.setAttribute('data-theme', '')
     }
     /**
      * @description: change Skin type
@@ -45,7 +45,7 @@ export class SmartSkin {
         if (skinType) {
             this.options.currentSkin = skinType
             this.removeAllSkinType()
-            document.body.classList.add(skinType)
+            document.documentElement.setAttribute('data-theme', this.options.currentSkin)
         }
     }
     private _followUpSystem(ev: MediaQueryListEvent | MediaQueryList) {
@@ -54,9 +54,7 @@ export class SmartSkin {
             ev.matches ? this.options.darkSkinType : this.options.lightSkinStype
         )
     }
-    setupDarkModeDebugger = () => {
-        const isExistButton = document.querySelector('.darkmode-toggle')
-        if (isExistButton) return
+    private _setupDarkModeDebugger = () => {
         const addStyle = (css: string) => {
             const linkElement = document.createElement('link')
             linkElement.setAttribute('rel', 'stylesheet')
@@ -95,12 +93,12 @@ export class SmartSkin {
             this.changeSkinType(this.options.skinTypeList[index])
         })
         document.body.appendChild(button)
-        let moveFlag = false
+        let canMove = false
         button.addEventListener('mousedown', () => {
-            moveFlag = true
+            canMove = true
         })
         document.documentElement.addEventListener('mousemove', (ev) => {
-            if (moveFlag) {
+            if (canMove) {
                 console.log(1)
                 window.requestAnimationFrame(() => {
                     button.style.left = ev.x - 15 + 'px'
@@ -109,13 +107,13 @@ export class SmartSkin {
             }
         })
         document.documentElement.addEventListener('mouseup', (ev) => {
-            moveFlag = false
+            canMove = false
         })
         button.addEventListener('touchstart', () => {
-            moveFlag = true
+            canMove = true
         })
         document.documentElement.addEventListener('touchmove', (ev) => {
-            if (moveFlag) {
+            if (canMove) {
                 window.requestAnimationFrame(() => {
                     button.style.left = ev.changedTouches[0].pageX - 15 + 'px'
                     button.style.top = ev.changedTouches[0].pageY - 15 + 'px'
@@ -123,7 +121,7 @@ export class SmartSkin {
             }
         })
         document.documentElement.addEventListener('touchend', (ev) => {
-            moveFlag = false
+            canMove = false
         })
         addStyle(css)
     }
