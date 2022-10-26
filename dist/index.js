@@ -22,23 +22,25 @@ var SmartSkin = /** @class */ (function () {
             });
             document.body.appendChild(button);
             var canMove = false;
-            button.addEventListener('mousedown', function () {
+            function moveStart(event) {
+                event.stopPropagation(); // 阻止冒泡
+                event.preventDefault(); // 阻止默认事件
                 canMove = true;
-            });
+            }
+            button.addEventListener('mousedown', moveStart);
+            button.addEventListener('touchstart', moveStart);
+            function moveEnd() {
+                canMove = false;
+            }
+            document.documentElement.addEventListener('mouseup', moveEnd);
+            document.documentElement.addEventListener('touchend', moveEnd);
             document.documentElement.addEventListener('mousemove', function (ev) {
                 if (canMove) {
-                    console.log(1);
                     window.requestAnimationFrame(function () {
                         button.style.left = ev.x - 15 + 'px';
                         button.style.top = ev.y - 15 + 'px';
                     });
                 }
-            });
-            document.documentElement.addEventListener('mouseup', function (ev) {
-                canMove = false;
-            });
-            button.addEventListener('touchstart', function () {
-                canMove = true;
             });
             document.documentElement.addEventListener('touchmove', function (ev) {
                 if (canMove) {
@@ -47,9 +49,6 @@ var SmartSkin = /** @class */ (function () {
                         button.style.top = ev.changedTouches[0].pageY - 15 + 'px';
                     });
                 }
-            });
-            document.documentElement.addEventListener('touchend', function (ev) {
-                canMove = false;
             });
             addStyle(css);
         };

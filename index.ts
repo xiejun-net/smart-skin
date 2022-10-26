@@ -94,23 +94,26 @@ export default class SmartSkin{
         })
         document.body.appendChild(button)
         let canMove = false
-        button.addEventListener('mousedown', () => {
+        function moveStart(event: TouchEvent | MouseEvent) {
+            event.stopPropagation() // 阻止冒泡
+            event.preventDefault() // 阻止默认事件
             canMove = true
-        })
+        }
+        button.addEventListener('mousedown', moveStart)
+        button.addEventListener('touchstart', moveStart)
+        function moveEnd() {
+            canMove = false
+        }
+        document.documentElement.addEventListener('mouseup', moveEnd)
+        document.documentElement.addEventListener('touchend', moveEnd)
+
         document.documentElement.addEventListener('mousemove', (ev) => {
             if (canMove) {
-                console.log(1)
                 window.requestAnimationFrame(() => {
                     button.style.left = ev.x - 15 + 'px'
                     button.style.top = ev.y - 15 + 'px'
                 })
             }
-        })
-        document.documentElement.addEventListener('mouseup', (ev) => {
-            canMove = false
-        })
-        button.addEventListener('touchstart', () => {
-            canMove = true
         })
         document.documentElement.addEventListener('touchmove', (ev) => {
             if (canMove) {
@@ -119,9 +122,6 @@ export default class SmartSkin{
                     button.style.top = ev.changedTouches[0].pageY - 15 + 'px'
                 })
             }
-        })
-        document.documentElement.addEventListener('touchend', (ev) => {
-            canMove = false
         })
         addStyle(css)
     }
