@@ -83,6 +83,10 @@ export default class SmartSkin{
         const button = document.createElement('button')
         button.innerHTML = '🌓'
         button.classList.add('darkmode-toggle')
+        window.onresize = (e) => {
+            button.style.left = document.documentElement.clientWidth - 80 + 'px';
+            button.style.top = document.documentElement.clientHeight - 80 + 'px';
+        }
         button.style.left = document.documentElement.clientWidth - 80 + 'px'
         button.style.top = document.documentElement.clientHeight - 80 + 'px'
         let changeSkin = () => {

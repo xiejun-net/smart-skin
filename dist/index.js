@@ -13,6 +13,11 @@ var SmartSkin = /** @class */ (function () {
             var button = document.createElement('button');
             button.innerHTML = '🌓';
             button.classList.add('darkmode-toggle');
+            window.onresize = function (e) {
+                console.log(e);
+                button.style.left = document.documentElement.clientWidth - 80 + 'px';
+                button.style.top = document.documentElement.clientHeight - 80 + 'px';
+            };
             button.style.left = document.documentElement.clientWidth - 80 + 'px';
             button.style.top = document.documentElement.clientHeight - 80 + 'px';
             var changeSkin = function () {
@@ -47,7 +52,7 @@ var SmartSkin = /** @class */ (function () {
                     isMoving = false;
                     return;
                 }
-                if (new Date().getTime() - touchStartTime < 200) {
+                if (new Date().getTime() - touchStartTime < 100) {
                     changeSkin();
                 }
             });
