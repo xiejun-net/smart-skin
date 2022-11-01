@@ -8,7 +8,7 @@ export default {
       format: 'esm'
     },
     {
-      file: 'dist/index.common.js',
+      file: 'docs/index.common.js',
       format: 'umd',
       name: 'SmartSkin'
     }

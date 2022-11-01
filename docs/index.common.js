@@ -21,10 +21,18 @@
                 button.classList.add('darkmode-toggle');
                 button.style.left = document.documentElement.clientWidth - 80 + 'px';
                 button.style.top = document.documentElement.clientHeight - 80 + 'px';
-                button.addEventListener('click', function () {
+                var changeSkin = function () {
                     var index = _this.options.skinTypeList.findIndex(function (item) { return item === _this.options.currentSkin; });
                     index = (index + 1) % _this.options.skinTypeList.length;
                     _this.changeSkinType(_this.options.skinTypeList[index]);
+                };
+                button.addEventListener('click', function () {
+                    changeSkin();
+                });
+                var touchStartTime = new Date().getTime();
+                var isMoving = false;
+                button.addEventListener('touchstart', function () {
+                    touchStartTime = new Date().getTime();
                 });
                 document.body.appendChild(button);
                 var canMove = false;
@@ -39,7 +47,16 @@
                     canMove = false;
                 }
                 document.documentElement.addEventListener('mouseup', moveEnd);
-                document.documentElement.addEventListener('touchend', moveEnd);
+                document.documentElement.addEventListener('touchend', function () {
+                    canMove = false;
+                    if (isMoving) {
+                        isMoving = false;
+                        return;
+                    }
+                    if (new Date().getTime() - touchStartTime < 200) {
+                        changeSkin();
+                    }
+                });
                 document.documentElement.addEventListener('mousemove', function (ev) {
                     if (canMove) {
                         window.requestAnimationFrame(function () {
@@ -49,6 +66,8 @@
                     }
                 });
                 document.documentElement.addEventListener('touchmove', function (ev) {
+                    console.log('isMoving', ev);
+                    isMoving = true;
                     if (canMove) {
                         window.requestAnimationFrame(function () {
                             button.style.left = ev.changedTouches[0].pageX - 15 + 'px';

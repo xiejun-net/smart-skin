@@ -85,12 +85,20 @@ export default class SmartSkin{
         button.classList.add('darkmode-toggle')
         button.style.left = document.documentElement.clientWidth - 80 + 'px'
         button.style.top = document.documentElement.clientHeight - 80 + 'px'
-        button.addEventListener('click', () => {
+        let changeSkin = () => {
             let index = this.options.skinTypeList.findIndex(
                 (item) => item === this.options.currentSkin
             )
             index = (index + 1) % this.options.skinTypeList.length
             this.changeSkinType(this.options.skinTypeList[index])
+        }
+        button.addEventListener('click', () => {
+            changeSkin()
+        })
+        let touchStartTime = new Date().getTime()
+        let isMoving = false
+        button.addEventListener('touchstart', () => {
+            touchStartTime = new Date().getTime()
         })
         document.body.appendChild(button)
         let canMove = false
@@ -105,7 +113,16 @@ export default class SmartSkin{
             canMove = false
         }
         document.documentElement.addEventListener('mouseup', moveEnd)
-        document.documentElement.addEventListener('touchend', moveEnd)
+        document.documentElement.addEventListener('touchend', () => {
+            canMove = false
+            if (isMoving) {
+                isMoving = false
+                return
+            }
+            if (new Date().getTime() - touchStartTime < 100) {
+                changeSkin()
+            }
+        })
 
         document.documentElement.addEventListener('mousemove', (ev) => {
             if (canMove) {
@@ -116,6 +133,8 @@ export default class SmartSkin{
             }
         })
         document.documentElement.addEventListener('touchmove', (ev) => {
+            console.log('isMoving', ev)
+            isMoving = true
             if (canMove) {
                 window.requestAnimationFrame(() => {
                     button.style.left = ev.changedTouches[0].pageX - 15 + 'px'

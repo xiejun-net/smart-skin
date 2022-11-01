@@ -1,6 +1,6 @@
 {
   "name": "smart-skin",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "js for web change skin",
   "main": "dist/index.js",
   "author": "xiejun",
