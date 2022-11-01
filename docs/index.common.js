@@ -20,7 +20,6 @@
                 button.innerHTML = '🌓';
                 button.classList.add('darkmode-toggle');
                 window.onresize = function (e) {
-                    console.log(e);
                     button.style.left = document.documentElement.clientWidth - 80 + 'px';
                     button.style.top = document.documentElement.clientHeight - 80 + 'px';
                 };
