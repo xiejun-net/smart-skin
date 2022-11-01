@@ -1,4 +1,3 @@
-## 主题皮肤切换解决方案
 
 背景：做了一年的App突然需要加主题切换的功能，App中有大量的h5页面，如果一次性全量替换其开发周期会很长，且全量发布出问题的概率会比较大；另有一些跳转比较深的页面不需要做主题切换功能，但是这些页面可能和需要做主题色的页面是同一个单页面，所以主题切换需要做到路由级别。
 
@@ -82,6 +81,7 @@ private _followUpSystem(ev: MediaQueryListEvent | MediaQueryList) {
 **支持本地调试切换主题**
 
 debugger设置为true即可
+[demo](https://xiejun-net.github.io/smart-skin/index.html)
 
 ![xxx.gif](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4429a2347c5640cdbdd97152c2478f98~tplv-k3u1fbpfcp-watermark.image?)
 
