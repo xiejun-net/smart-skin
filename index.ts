@@ -25,7 +25,9 @@ export default class SmartSkin{
         if (this.options.followUpSystem) {
             const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
             this._followUpSystem(matchMedia)
-            matchMedia.addEventListener('change', this._followUpSystem)
+            matchMedia.addEventListener('change', (ev) => {
+                this._followUpSystem(ev)
+            })
         }
         this.options.debugger && this._setupDarkModeDebugger()
     }
