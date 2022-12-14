@@ -3,33 +3,33 @@ var SmartSkin = /** @class */ (function () {
         var _this = this;
         this._setupDarkModeDebugger = function () {
             var addStyle = function (css) {
-                var linkElement = document.createElement('link');
-                linkElement.setAttribute('rel', 'stylesheet');
-                linkElement.setAttribute('type', 'text/css');
-                linkElement.setAttribute('href', 'data:text/css;charset=UTF-8,' + encodeURIComponent(css));
+                var linkElement = document.createElement("link");
+                linkElement.setAttribute("rel", "stylesheet");
+                linkElement.setAttribute("type", "text/css");
+                linkElement.setAttribute("href", "data:text/css;charset=UTF-8," + encodeURIComponent(css));
                 document.head.appendChild(linkElement);
             };
             var css = "\n                .darkmode-toggle {\n                    background: #100f2c;\n                    width: 40px;\n                    height: 40px;\n                    position: fixed;\n                    border-radius: 50%;\n                    border:none;\n                    cursor: pointer;\n                    display: flex;\n                    justify-content: center;\n                    align-items: center;\n                    z-index:9999;\n                  }\n            ";
-            var button = document.createElement('button');
-            button.innerHTML = '🌓';
-            button.classList.add('darkmode-toggle');
+            var button = document.createElement("button");
+            button.innerHTML = "🌓";
+            button.classList.add("darkmode-toggle");
             window.onresize = function (e) {
-                button.style.left = document.documentElement.clientWidth - 80 + 'px';
-                button.style.top = document.documentElement.clientHeight - 80 + 'px';
+                button.style.left = document.documentElement.clientWidth - 80 + "px";
+                button.style.top = document.documentElement.clientHeight - 80 + "px";
             };
-            button.style.left = document.documentElement.clientWidth - 80 + 'px';
-            button.style.top = document.documentElement.clientHeight - 80 + 'px';
+            button.style.left = document.documentElement.clientWidth - 80 + "px";
+            button.style.top = document.documentElement.clientHeight - 80 + "px";
             var changeSkin = function () {
                 var index = _this.options.skinTypeList.findIndex(function (item) { return item === _this.options.currentSkin; });
                 index = (index + 1) % _this.options.skinTypeList.length;
                 _this.changeSkinType(_this.options.skinTypeList[index]);
             };
-            button.addEventListener('click', function () {
+            button.addEventListener("click", function () {
                 changeSkin();
             });
             var touchStartTime = new Date().getTime();
             var isMoving = false;
-            button.addEventListener('touchstart', function () {
+            button.addEventListener("touchstart", function () {
                 touchStartTime = new Date().getTime();
             });
             document.body.appendChild(button);
@@ -39,13 +39,13 @@ var SmartSkin = /** @class */ (function () {
                 event.preventDefault(); // 阻止默认事件
                 canMove = true;
             }
-            button.addEventListener('mousedown', moveStart);
-            button.addEventListener('touchstart', moveStart);
+            button.addEventListener("mousedown", moveStart);
+            button.addEventListener("touchstart", moveStart);
             function moveEnd() {
                 canMove = false;
             }
-            document.documentElement.addEventListener('mouseup', moveEnd);
-            document.documentElement.addEventListener('touchend', function () {
+            document.documentElement.addEventListener("mouseup", moveEnd);
+            document.documentElement.addEventListener("touchend", function () {
                 canMove = false;
                 if (isMoving) {
                     isMoving = false;
@@ -55,21 +55,21 @@ var SmartSkin = /** @class */ (function () {
                     changeSkin();
                 }
             });
-            document.documentElement.addEventListener('mousemove', function (ev) {
+            document.documentElement.addEventListener("mousemove", function (ev) {
                 if (canMove) {
                     window.requestAnimationFrame(function () {
-                        button.style.left = ev.x - 15 + 'px';
-                        button.style.top = ev.y - 15 + 'px';
+                        button.style.left = ev.x - 15 + "px";
+                        button.style.top = ev.y - 15 + "px";
                     });
                 }
             });
-            document.documentElement.addEventListener('touchmove', function (ev) {
-                console.log('isMoving', ev);
+            document.documentElement.addEventListener("touchmove", function (ev) {
+                console.log("isMoving", ev);
                 isMoving = true;
                 if (canMove) {
                     window.requestAnimationFrame(function () {
-                        button.style.left = ev.changedTouches[0].pageX - 15 + 'px';
-                        button.style.top = ev.changedTouches[0].pageY - 15 + 'px';
+                        button.style.left = ev.changedTouches[0].pageX - 15 + "px";
+                        button.style.top = ev.changedTouches[0].pageY - 15 + "px";
                     });
                 }
             });
@@ -80,6 +80,7 @@ var SmartSkin = /** @class */ (function () {
             this.options.currentSkin || this.options.skinTypeList[0];
     }
     SmartSkin.prototype.init = function () {
+        var _this = this;
         if (this.options.skinTypeList.length === 0) {
             console.error("skinTypeList cannot be empty");
             return;
@@ -88,10 +89,19 @@ var SmartSkin = /** @class */ (function () {
             this.changeSkinType(this.options.currentSkin);
         }
         // 监听系统深色模式,安卓无效，不用判断，本身不会触发
-        if (this.options.followUpSystem) {
-            var matchMedia = window.matchMedia('(prefers-color-scheme: dark)');
+        if (/iPhone|Mac|iPad/.test(navigator.userAgent)) {
+            var matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
             this._followUpSystem(matchMedia);
-            matchMedia.addEventListener('change', this._followUpSystem);
+            if (matchMedia && matchMedia.addEventListener) {
+                matchMedia.addEventListener("change", function (ev) {
+                    _this._followUpSystem(ev);
+                });
+            }
+            else {
+                matchMedia.addListener(function (ev) {
+                    _this._followUpSystem(ev);
+                });
+            }
         }
         this.options.debugger && this._setupDarkModeDebugger();
     };
@@ -100,7 +110,7 @@ var SmartSkin = /** @class */ (function () {
      * @return {*}
      */
     SmartSkin.prototype.removeAllSkinType = function () {
-        document.documentElement.setAttribute('data-theme', '');
+        document.documentElement.setAttribute("data-theme", "");
     };
     /**
      * @description: change Skin type
@@ -111,7 +121,7 @@ var SmartSkin = /** @class */ (function () {
         if (skinType) {
             this.options.currentSkin = skinType;
             this.removeAllSkinType();
-            document.documentElement.setAttribute('data-theme', this.options.currentSkin);
+            document.documentElement.setAttribute("data-theme", this.options.currentSkin);
         }
     };
     SmartSkin.prototype._followUpSystem = function (ev) {

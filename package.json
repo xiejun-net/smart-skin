@@ -6,7 +6,8 @@
   "author": "xiejun",
   "license": "MIT",
   "scripts": {
-    "build": "rollup --config"
+    "build": "rollup --config",
+    "release": "yarn build && release-it"
   },
   "repository": {
     "type": "git",
@@ -14,10 +15,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
+    "release-it": "^15.5.1",
+    "rollup": "^2.79.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-typescript": "^1.0.1",
     "tslib": "^2.4.0",
-    "rollup": "^2.79.1",
     "typescript": "^4.8.4"
   }
 }
